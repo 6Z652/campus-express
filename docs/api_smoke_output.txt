@@ -1,0 +1,523 @@
+C:\Users\李艳慧\.workbuddy\binaries\python\versions\3.13.12\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+==============================================================================
+校园快递驿站智能取件助手 - API 冒烟测试（TestClient 真实调用）
+==============================================================================
+共调用 22 个接口步骤
+
+[01] 健康检查
+     API     : GET /api/health
+     request : -
+     status  : 200
+     response: {
+  "status": "ok",
+  "service": "campus-express",
+  "version": "1.0.0"
+}
+------------------------------------------------------------------------------
+[02] 根路径
+     API     : GET /
+     request : -
+     status  : 200
+     response: {
+  "message": "校园快递驿站智能取件助手 API",
+  "docs": "/docs",
+  "health": "/api/health"
+}
+------------------------------------------------------------------------------
+[03] UC-01 取件码查询(GET)
+     API     : GET /api/packages/lookup?code=A-1-01-001
+     request : -
+     status  : 200
+     response: {
+  "code": "A-1-01-001",
+  "shelf": {
+    "code": "A-1-01-001",
+    "area": "A",
+    "level": 1,
+    "slot": 1,
+    "sequence": 1,
+    "shelf": "A区-1层-01格"
+  },
+  "student": {
+    "id": "S2021001",
+    "name": "张三",
+    "phone": "13800001001"
+  },
+  "total": 3,
+  "packages": [
+    {
+      "id": 1,
+      "tracking_no": "SF1000000001",
+      "student_id": "S2021001",
+      "student_name": "张三",
+      "phone": "13800001001",
+      "size": "small",
+      "shelf": {
+        "area": "A",
+        "level": 1,
+        "slot": 1,
+        "label": "A区-1层-01格"
+      },
+      "pickup_code": "A-1-01-001",
+      "status": "in_stock",
+      "created_at": "2026-11-11T20:31:09",
+      "picked_up_at": null
+    },
+    {
+      "id": 2,
+      "tracking_no": "SF1000000002",
+      "student_id": "S2021001",
+      "student_name": "张三",
+      "phone": "13800001001",
+      "size": "medium",
+      "shelf": {
+        "area": "A",
+        "level": 1,
+        "slot": 2,
+        "label": "A区-1层-02格"
+      },
+      "pickup_code": "A-1-02-002",
+      "status": "in_stock",
+      "created_at": "2026-11-11T20:31:09",
+      "picked_up_at": null
+    },
+    {
+      "id": 3,
+      "tracking_no": "SF1000000003",
+      "student_id": "S2021001",
+      "student_name": "张三",
+      "phone": "13800001001",
+      "size": "large",
+      "shelf": {
+        "area": "A",
+        "level": 1,
+        "slot": 3,
+        "label": "A区-1层-03格"
+      },
+      "pickup_code": "A-1-03-003",
+      "status": "in_stock",
+      "created_at": "2026-11-11T20:31:09",
+      "picked_up_at": null
+    }
+  ]
+}
+------------------------------------------------------------------------------
+[04] UC-01 取件码查询(POST)
+     API     : POST /api/packages/lookup?code=A-1-01-001
+     request : -
+     status  : 200
+     response: {
+  "code": "A-1-01-001",
+  "shelf": {
+    "code": "A-1-01-001",
+    "area": "A",
+    "level": 1,
+    "slot": 1,
+    "sequence": 1,
+    "shelf": "A区-1层-01格"
+  },
+  "student": {
+    "id": "S2021001",
+    "name": "张三",
+    "phone": "13800001001"
+  },
+  "total": 3,
+  "packages": [
+    {
+      "id": 1,
+      "tracking_no": "SF1000000001",
+      "student_id": "S2021001",
+      "student_name": "张三",
+      "phone": "13800001001",
+      "size": "small",
+      "shelf": {
+        "area": "A",
+        "level": 1,
+        "slot": 1,
+        "label": "A区-1层-01格"
+      },
+      "pickup_code": "A-1-01-001",
+      "status": "in_stock",
+      "created_at": "2026-11-11T20:31:09",
+      "picked_up_at": null
+    },
+    {
+      "id": 2,
+      "tracking_no": "SF1000000002",
+      "student_id": "S2021001",
+      "student_name": "张三",
+      "phone": "13800001001",
+      "size": "medium",
+      "shelf": {
+        "area": "A",
+        "level": 1,
+        "slot": 2,
+        "label": "A区-1层-02格"
+      },
+      "pickup_code": "A-1-02-002",
+      "status": "in_stock",
+      "created_at": "2026-11-11T20:31:09",
+      "picked_up_at": null
+    },
+    {
+      "id": 3,
+      "tracking_no": "SF1000000003",
+      "student_id": "S2021001",
+      "student_name": "张三",
+      "phone": "13800001001",
+      "size": "large",
+      "shelf": {
+        "area": "A",
+        "level": 1,
+        "slot": 3,
+        "label": "A区-1层-03格"
+      },
+      "pickup_code": "A-1-03-003",
+      "status": "in_stock",
+      "created_at": "2026-11-11T20:31:09",
+      "picked_up_at": null
+    }
+  ]
+}
+------------------------------------------------------------------------------
+[05] UC-01 非法格式
+     API     : GET /api/packages/lookup?code=bad-code
+     request : -
+     status  : 400
+     response: {
+  "detail": "取件码格式非法: 'bad-code'，正确格式如 A-1-01-001"
+}
+------------------------------------------------------------------------------
+[06] UC-01 取件码不存在
+     API     : GET /api/packages/lookup?code=F-5-20-999
+     request : -
+     status  : 404
+     response: {
+  "detail": "取件码不存在: F-5-20-999"
+}
+------------------------------------------------------------------------------
+[07] UC-02 排队预测
+     API     : GET /api/queue/forecast
+     request : -
+     status  : 200
+     response: {
+  "current_hour": 20,
+  "pending_count": 5,
+  "servers": 2,
+  "avg_service_minutes": 0.8,
+  "predicted_wait_minutes": 2,
+  "congestion_level": "空闲",
+  "recommended_offpeak_hour": 10,
+  "recommendation": "当前预计等待 2 分钟（空闲），建议 10:00-10:59 错峰取件。",
+  "algorithm": "wait = ceil(pending_count * avg_service_minutes / servers); avg 取当前时段历史均值，无该时段取全局均值，完全无历史取 1.5min"
+}
+------------------------------------------------------------------------------
+[08] UC-03 扫码入库
+     API     : POST /api/packages/checkin
+     request : {"tracking_no": "SF9990000001", "student_id": "S2021004", "student_name": "赵六", "phone": "13800004004", "size": "large"}
+     status  : 200
+     response: {
+  "created": true,
+  "idempotent": false,
+  "message": "入库成功",
+  "pickup_code": "A-1-06-006",
+  "shelf": {
+    "area": "A",
+    "level": 1,
+    "slot": 6,
+    "label": "A区-1层-06格"
+  },
+  "package": {
+    "id": 6,
+    "tracking_no": "SF9990000001",
+    "student_id": "S2021004",
+    "student_name": "赵六",
+    "phone": "13800004004",
+    "size": "large",
+    "shelf": {
+      "area": "A",
+      "level": 1,
+      "slot": 6,
+      "label": "A区-1层-06格"
+    },
+    "pickup_code": "A-1-06-006",
+    "status": "in_stock",
+    "created_at": "2026-11-11T20:31:09",
+    "picked_up_at": null
+  }
+}
+------------------------------------------------------------------------------
+[09] UC-03 重复入库(幂等)
+     API     : POST /api/packages/checkin
+     request : {"tracking_no": "SF9990000001", "student_id": "S2021004", "student_name": "赵六", "phone": "13800004004", "size": "large"}
+     status  : 200
+     response: {
+  "created": false,
+  "idempotent": true,
+  "message": "运单号已存在，跳过重复入库",
+  "pickup_code": "A-1-06-006",
+  "shelf": {
+    "area": "A",
+    "level": 1,
+    "slot": 6,
+    "label": "A区-1层-06格"
+  },
+  "package": {
+    "id": 6,
+    "tracking_no": "SF9990000001",
+    "student_id": "S2021004",
+    "student_name": "赵六",
+    "phone": "13800004004",
+    "size": "large",
+    "shelf": {
+      "area": "A",
+      "level": 1,
+      "slot": 6,
+      "label": "A区-1层-06格"
+    },
+    "pickup_code": "A-1-06-006",
+    "status": "in_stock",
+    "created_at": "2026-11-11T20:31:09",
+    "picked_up_at": null
+  }
+}
+------------------------------------------------------------------------------
+[10] UC-01 查询新入库包裹
+     API     : GET /api/packages/lookup?code=A-1-06-006
+     request : -
+     status  : 200
+     response: {
+  "code": "A-1-06-006",
+  "shelf": {
+    "code": "A-1-06-006",
+    "area": "A",
+    "level": 1,
+    "slot": 6,
+    "sequence": 6,
+    "shelf": "A区-1层-06格"
+  },
+  "student": {
+    "id": "S2021004",
+    "name": "赵六",
+    "phone": "13800004004"
+  },
+  "total": 1,
+  "packages": [
+    {
+      "id": 6,
+      "tracking_no": "SF9990000001",
+      "student_id": "S2021004",
+      "student_name": "赵六",
+      "phone": "13800004004",
+      "size": "large",
+      "shelf": {
+        "area": "A",
+        "level": 1,
+        "slot": 6,
+        "label": "A区-1层-06格"
+      },
+      "pickup_code": "A-1-06-006",
+      "status": "in_stock",
+      "created_at": "2026-11-11T20:31:09",
+      "picked_up_at": null
+    }
+  ]
+}
+------------------------------------------------------------------------------
+[11] UC-04 生成代取授权
+     API     : POST /api/packages/authorize
+     request : {"pickup_code": "A-1-01-001", "delegate_name": "同学甲", "delegate_phone": "13800000000", "ttl_minutes": 30}
+     status  : 200
+     response: {
+  "created": true,
+  "pickup_code": "A-1-01-001",
+  "auth_code": "431064",
+  "delegate_name": "同学甲",
+  "expires_at": "2026-11-11T21:01:09",
+  "ttl_minutes": 30,
+  "message": "代取授权已生成"
+}
+------------------------------------------------------------------------------
+[12] UC-04 查询授权状态
+     API     : GET /api/packages/authorize/A-1-01-001
+     request : -
+     status  : 200
+     response: {
+  "pickup_code": "A-1-01-001",
+  "has_authorization": true,
+  "active_authorization": {
+    "auth_code": "431064",
+    "delegate_name": "同学甲",
+    "delegate_phone": "13800000000",
+    "expires_at": "2026-11-11T21:01:09",
+    "used": false,
+    "expired": false,
+    "valid": true,
+    "reason": "有效",
+    "created_at": "2026-11-11T20:31:09"
+  },
+  "valid": true,
+  "reason": "有效授权存在",
+  "authorizations": [
+    {
+      "auth_code": "431064",
+      "delegate_name": "同学甲",
+      "delegate_phone": "13800000000",
+      "expires_at": "2026-11-11T21:01:09",
+      "used": false,
+      "expired": false,
+      "valid": true,
+      "reason": "有效",
+      "created_at": "2026-11-11T20:31:09"
+    }
+  ]
+}
+------------------------------------------------------------------------------
+[13] UC-04 重复授权(拒绝)
+     API     : POST /api/packages/authorize
+     request : {"pickup_code": "A-1-01-001", "delegate_name": "同学甲", "delegate_phone": "13800000000", "ttl_minutes": 30}
+     status  : 409
+     response: {
+  "detail": "该取件码已有有效授权，请勿重复授权"
+}
+------------------------------------------------------------------------------
+[14] UC-04 错误授权码出库
+     API     : POST /api/packages/checkout
+     request : {"pickup_code": "A-1-01-001", "auth_code": "000000", "operator": "值班员A"}
+     status  : 403
+     response: {
+  "detail": "代取授权码无效或与取件码不匹配"
+}
+------------------------------------------------------------------------------
+[15] UC-04 代取出库
+     API     : POST /api/packages/checkout
+     request : {"pickup_code": "A-1-01-001", "auth_code": "431064", "operator": "值班员A"}
+     status  : 200
+     response: {
+  "checked_out": true,
+  "exception_registered": false,
+  "pickup_code": "A-1-01-001",
+  "auth_code_used": "431064",
+  "operator": "值班员A",
+  "picked_up_at": "2026-11-11T20:31:09",
+  "message": "代取出库核验通过",
+  "package": {
+    "id": 1,
+    "tracking_no": "SF1000000001",
+    "student_id": "S2021001",
+    "student_name": "张三",
+    "phone": "13800001001",
+    "size": "small",
+    "shelf": {
+      "area": "A",
+      "level": 1,
+      "slot": 1,
+      "label": "A区-1层-01格"
+    },
+    "pickup_code": "A-1-01-001",
+    "status": "picked_up",
+    "created_at": "2026-11-11T20:31:09",
+    "picked_up_at": "2026-11-11T20:31:09"
+  }
+}
+------------------------------------------------------------------------------
+[16] UC-04 重复出库(拒绝)
+     API     : POST /api/packages/checkout
+     request : {"pickup_code": "A-1-01-001", "operator": "值班员A"}
+     status  : 409
+     response: {
+  "detail": "重复出库或包裹不可出库，当前状态: picked_up"
+}
+------------------------------------------------------------------------------
+[17] UC-04 生成过期授权(ttl=0)
+     API     : POST /api/packages/authorize
+     request : {"pickup_code": "A-1-02-002", "delegate_name": "同学乙", "ttl_minutes": 0}
+     status  : 200
+     response: {
+  "created": true,
+  "pickup_code": "A-1-02-002",
+  "auth_code": "732379",
+  "delegate_name": "同学乙",
+  "expires_at": "2026-11-11T20:31:09",
+  "ttl_minutes": 0,
+  "message": "代取授权已生成"
+}
+------------------------------------------------------------------------------
+[18] UC-04 过期授权出库(拒绝)
+     API     : POST /api/packages/checkout
+     request : {"pickup_code": "A-1-02-002", "auth_code": "732379"}
+     status  : 403
+     response: {
+  "detail": "代取授权已过期，请重新授权"
+}
+------------------------------------------------------------------------------
+[19] UC-04 登记异常件
+     API     : POST /api/packages/checkout
+     request : {"pickup_code": "A-1-03-003", "operator": "值班员A", "note": "外包装破损，暂停出库", "report_exception": true}
+     status  : 200
+     response: {
+  "checked_out": false,
+  "exception_registered": true,
+  "reason": "外包装破损，暂停出库",
+  "message": "异常件已登记，包裹暂停出库",
+  "package": {
+    "id": 3,
+    "tracking_no": "SF1000000003",
+    "student_id": "S2021001",
+    "student_name": "张三",
+    "phone": "13800001001",
+    "size": "large",
+    "shelf": {
+      "area": "A",
+      "level": 1,
+      "slot": 3,
+      "label": "A区-1层-03格"
+    },
+    "pickup_code": "A-1-03-003",
+    "status": "exception",
+    "created_at": "2026-11-11T20:31:09",
+    "picked_up_at": null
+  }
+}
+------------------------------------------------------------------------------
+[20] UC-04 异常件清单
+     API     : GET /api/packages/exceptions
+     request : -
+     status  : 200
+     response: {
+  "total": 1,
+  "exceptions": [
+    {
+      "id": 1,
+      "pickup_code": "A-1-03-003",
+      "tracking_no": "SF1000000003",
+      "reason": "外包装破损，暂停出库",
+      "operator": "值班员A",
+      "created_at": "2026-11-11T20:31:09"
+    }
+  ]
+}
+------------------------------------------------------------------------------
+[21] UC-04 查询未授权包裹
+     API     : GET /api/packages/authorize/A-1-04-004
+     request : -
+     status  : 200
+     response: {
+  "pickup_code": "A-1-04-004",
+  "has_authorization": false,
+  "active_authorization": null,
+  "valid": false,
+  "reason": "从未授权",
+  "authorizations": []
+}
+------------------------------------------------------------------------------
+[22] UC-04 对不存在取件码授权
+     API     : POST /api/packages/authorize
+     request : {"pickup_code": "F-5-20-999", "delegate_name": "同学丙"}
+     status  : 404
+     response: {
+  "detail": "取件码不存在: F-5-20-999"
+}
+------------------------------------------------------------------------------
+完成：22 次调用，2xx=15，非 2xx=7

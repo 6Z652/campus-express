@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>校园快递驿站智能取件助手</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>校园快递驿站 · 智能取件助手</h1>
+    <p class="subtitle">《高级软件工程》课程项目 · 最小可运行演示</p>
+    <div class="config">
+      <label for="apiBase">后端地址</label>
+      <input id="apiBase" value="http://127.0.0.1:8000" size="26">
+      <button id="btnHealth" class="btn ghost">检测连接</button>
+      <span id="healthTip" class="hint"></span>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="student">学生端</button>
+    <button class="tab" data-tab="staff">工作人员端</button>
+  </nav>
+
+  <!-- ===================== 学生端 ===================== -->
+  <main id="tab-student" class="panel active">
+    <section class="card">
+      <h2>1. 取件码查询与包裹聚合</h2>
+      <div class="row">
+        <input id="lookupCode" placeholder="取件码，例如 A-1-01-001" value="A-1-01-001" size="24">
+        <button id="btnLookup" class="btn">查询</button>
+      </div>
+      <p class="hint">取件码格式：区(A-F)-层(1-5)-格(2位)-序号，例如 A-1-01-001</p>
+      <div id="lookupResult" class="result"></div>
+    </section>
+
+    <section class="card">
+      <h2>2. 排队预测与错峰建议</h2>
+      <button id="btnForecast" class="btn">刷新预测</button>
+      <div id="forecastResult" class="result"></div>
+    </section>
+
+    <section class="card">
+      <h2>3. 代取授权</h2>
+      <div class="row wrap">
+        <input id="authPickupCode" placeholder="取件码" value="A-1-01-001" size="18">
+        <input id="authDelegate" placeholder="代取人姓名" value="同学甲" size="12">
+        <input id="authPhone" placeholder="代取人电话" value="13800000000" size="16">
+        <label>有效分钟 <input id="authTtl" type="number" value="30" size="4"></label>
+        <button id="btnAuthorize" class="btn">生成授权</button>
+      </div>
+      <div class="row">
+        <button id="btnQueryAuth" class="btn ghost">查询授权状态</button>
+      </div>
+      <div id="authResult" class="result"></div>
+    </section>
+  </main>
+
+  <!-- ===================== 工作人员端 ===================== -->
+  <main id="tab-staff" class="panel">
+    <section class="card">
+      <h2>1. 入库与货架分配</h2>
+      <div class="row wrap">
+        <input id="inTracking" placeholder="运单号" value="SF9990000001" size="18">
+        <input id="inStudent" placeholder="学号" value="S2021004" size="12">
+        <input id="inName" placeholder="姓名" value="赵六" size="10">
+        <input id="inPhone" placeholder="电话" value="13800004004" size="16">
+        <select id="inSize">
+          <option value="small">小件</option>
+          <option value="medium" selected>中件</option>
+          <option value="large">大件</option>
+        </select>
+        <button id="btnCheckin" class="btn">扫码入库</button>
+      </div>
+      <p class="hint">系统自动分配货架位（区-层-格）并生成取件码；重复运单号不会重复入库。</p>
+      <div id="checkinResult" class="result"></div>
+    </section>
+
+    <section class="card">
+      <h2>2. 出库核验</h2>
+      <div class="row wrap">
+        <input id="outCode" placeholder="取件码" value="A-1-01-001" size="18">
+        <input id="outAuth" placeholder="代取授权码（可空）" size="18">
+        <input id="outOperator" placeholder="操作员" value="值班员A" size="12">
+        <input id="outNote" placeholder="备注 / 异常原因" size="20">
+      </div>
+      <div class="row">
+        <button id="btnCheckout" class="btn">出库核验</button>
+        <button id="btnException" class="btn warn">登记异常件</button>
+        <button id="btnExceptions" class="btn ghost">查看异常件</button>
+      </div>
+      <div id="checkoutResult" class="result"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    数据来源：本地 SQLite（data/express.db）· 所有数据由启动时 seed 生成，可重复演示
+  </footer>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

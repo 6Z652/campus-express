@@ -1,0 +1,28 @@
+# SQLite 数据库（二进制，禁止提交；由启动时自动建表 + seed 生成）
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+!data/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.coverage
+htmlcov/
+*.egg-info/
+
+# 编辑器 / 系统
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# 临时日志
+*.log
+
+# 注意：docs/ 下的 smoke_test_output.txt、api_smoke_output.txt、REAL_METRICS.json
+# 是课程提交材料，必须提交，故不加入忽略列表。

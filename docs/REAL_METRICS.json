@@ -1,0 +1,741 @@
+{
+  "generated_at": "2026-11-11T20:31:52",
+  "note": "本文件所有数字均由 scripts/collect_metrics.py 在本机实际运行采集，未手工编造。测试数来自 pytest -q 真实输出；耗时由 time.perf_counter() 真实测量；API 响应来自 TestClient 真实调用。",
+  "environment": {
+    "python_version": "3.13.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "fastapi_version": "0.162.4",
+    "pytest_version": "9.2.0"
+  },
+  "tests": {
+    "total": 37,
+    "passed": 37,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "warnings": 1,
+    "pytest_summary_line": "37 passed, 1 warning in 4.96s",
+    "by_module": {
+      "tests/test_api.py": 24,
+      "tests/test_forecast.py": 13
+    },
+    "by_use_case": {
+      "UC-01": 5,
+      "UC-02": 1,
+      "UC-03": 3,
+      "UC-04": 14,
+      "健康检查": 1,
+      "预测算法边界(纯函数)": 13
+    },
+    "collect_only_returncode": 0,
+    "consistency_check": {
+      "collected_equals_passed_plus_failed": true,
+      "timing_run_passed": 37,
+      "timing_run_summary_line": "37 passed, 1 warning in 4.94s"
+    }
+  },
+  "timing_seconds": {
+    "pytest_wall_time_measured": 7.687,
+    "pytest_reported_duration": 4.96,
+    "smoke_api_calls_wall_time_measured": 1.62,
+    "metrics_collection_total_wall_time_measured": 12.086
+  },
+  "api_calls": {
+    "total": 22,
+    "ok_2xx": 15,
+    "non_2xx": 7,
+    "status_code_counts": {
+      "200": 15,
+      "400": 1,
+      "403": 2,
+      "404": 2,
+      "409": 2
+    },
+    "responses": [
+      {
+        "name": "健康检查",
+        "api": "GET /api/health",
+        "method": "GET",
+        "path": "/api/health",
+        "request_body": null,
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "status": "ok",
+          "service": "campus-express",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "name": "根路径",
+        "api": "GET /",
+        "method": "GET",
+        "path": "/",
+        "request_body": null,
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "message": "校园快递驿站智能取件助手 API",
+          "docs": "/docs",
+          "health": "/api/health"
+        }
+      },
+      {
+        "name": "UC-01 取件码查询(GET)",
+        "api": "GET /api/packages/lookup?code=A-1-01-001",
+        "method": "GET",
+        "path": "/api/packages/lookup?code=A-1-01-001",
+        "request_body": null,
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "code": "A-1-01-001",
+          "shelf": {
+            "code": "A-1-01-001",
+            "area": "A",
+            "level": 1,
+            "slot": 1,
+            "sequence": 1,
+            "shelf": "A区-1层-01格"
+          },
+          "student": {
+            "id": "S2021001",
+            "name": "张三",
+            "phone": "13800001001"
+          },
+          "total": 3,
+          "packages": [
+            {
+              "id": 1,
+              "tracking_no": "SF1000000001",
+              "student_id": "S2021001",
+              "student_name": "张三",
+              "phone": "13800001001",
+              "size": "small",
+              "shelf": {
+                "area": "A",
+                "level": 1,
+                "slot": 1,
+                "label": "A区-1层-01格"
+              },
+              "pickup_code": "A-1-01-001",
+              "status": "in_stock",
+              "created_at": "2026-11-11T20:31:52",
+              "picked_up_at": null
+            },
+            {
+              "id": 2,
+              "tracking_no": "SF1000000002",
+              "student_id": "S2021001",
+              "student_name": "张三",
+              "phone": "13800001001",
+              "size": "medium",
+              "shelf": {
+                "area": "A",
+                "level": 1,
+                "slot": 2,
+                "label": "A区-1层-02格"
+              },
+              "pickup_code": "A-1-02-002",
+              "status": "in_stock",
+              "created_at": "2026-11-11T20:31:52",
+              "picked_up_at": null
+            },
+            {
+              "id": 3,
+              "tracking_no": "SF1000000003",
+              "student_id": "S2021001",
+              "student_name": "张三",
+              "phone": "13800001001",
+              "size": "large",
+              "shelf": {
+                "area": "A",
+                "level": 1,
+                "slot": 3,
+                "label": "A区-1层-03格"
+              },
+              "pickup_code": "A-1-03-003",
+              "status": "in_stock",
+              "created_at": "2026-11-11T20:31:52",
+              "picked_up_at": null
+            }
+          ]
+        }
+      },
+      {
+        "name": "UC-01 取件码查询(POST)",
+        "api": "POST /api/packages/lookup?code=A-1-01-001",
+        "method": "POST",
+        "path": "/api/packages/lookup?code=A-1-01-001",
+        "request_body": null,
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "code": "A-1-01-001",
+          "shelf": {
+            "code": "A-1-01-001",
+            "area": "A",
+            "level": 1,
+            "slot": 1,
+            "sequence": 1,
+            "shelf": "A区-1层-01格"
+          },
+          "student": {
+            "id": "S2021001",
+            "name": "张三",
+            "phone": "13800001001"
+          },
+          "total": 3,
+          "packages": [
+            {
+              "id": 1,
+              "tracking_no": "SF1000000001",
+              "student_id": "S2021001",
+              "student_name": "张三",
+              "phone": "13800001001",
+              "size": "small",
+              "shelf": {
+                "area": "A",
+                "level": 1,
+                "slot": 1,
+                "label": "A区-1层-01格"
+              },
+              "pickup_code": "A-1-01-001",
+              "status": "in_stock",
+              "created_at": "2026-11-11T20:31:52",
+              "picked_up_at": null
+            },
+            {
+              "id": 2,
+              "tracking_no": "SF1000000002",
+              "student_id": "S2021001",
+              "student_name": "张三",
+              "phone": "13800001001",
+              "size": "medium",
+              "shelf": {
+                "area": "A",
+                "level": 1,
+                "slot": 2,
+                "label": "A区-1层-02格"
+              },
+              "pickup_code": "A-1-02-002",
+              "status": "in_stock",
+              "created_at": "2026-11-11T20:31:52",
+              "picked_up_at": null
+            },
+            {
+              "id": 3,
+              "tracking_no": "SF1000000003",
+              "student_id": "S2021001",
+              "student_name": "张三",
+              "phone": "13800001001",
+              "size": "large",
+              "shelf": {
+                "area": "A",
+                "level": 1,
+                "slot": 3,
+                "label": "A区-1层-03格"
+              },
+              "pickup_code": "A-1-03-003",
+              "status": "in_stock",
+              "created_at": "2026-11-11T20:31:52",
+              "picked_up_at": null
+            }
+          ]
+        }
+      },
+      {
+        "name": "UC-01 非法格式",
+        "api": "GET /api/packages/lookup?code=bad-code",
+        "method": "GET",
+        "path": "/api/packages/lookup?code=bad-code",
+        "request_body": null,
+        "status_code": 400,
+        "ok": false,
+        "response": {
+          "detail": "取件码格式非法: 'bad-code'，正确格式如 A-1-01-001"
+        }
+      },
+      {
+        "name": "UC-01 取件码不存在",
+        "api": "GET /api/packages/lookup?code=F-5-20-999",
+        "method": "GET",
+        "path": "/api/packages/lookup?code=F-5-20-999",
+        "request_body": null,
+        "status_code": 404,
+        "ok": false,
+        "response": {
+          "detail": "取件码不存在: F-5-20-999"
+        }
+      },
+      {
+        "name": "UC-02 排队预测",
+        "api": "GET /api/queue/forecast",
+        "method": "GET",
+        "path": "/api/queue/forecast",
+        "request_body": null,
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "current_hour": 20,
+          "pending_count": 5,
+          "servers": 2,
+          "avg_service_minutes": 0.8,
+          "predicted_wait_minutes": 2,
+          "congestion_level": "空闲",
+          "recommended_offpeak_hour": 10,
+          "recommendation": "当前预计等待 2 分钟（空闲），建议 10:00-10:59 错峰取件。",
+          "algorithm": "wait = ceil(pending_count * avg_service_minutes / servers); avg 取当前时段历史均值，无该时段取全局均值，完全无历史取 1.5min"
+        }
+      },
+      {
+        "name": "UC-03 扫码入库",
+        "api": "POST /api/packages/checkin",
+        "method": "POST",
+        "path": "/api/packages/checkin",
+        "request_body": {
+          "tracking_no": "SF9990000001",
+          "student_id": "S2021004",
+          "student_name": "赵六",
+          "phone": "13800004004",
+          "size": "large"
+        },
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "created": true,
+          "idempotent": false,
+          "message": "入库成功",
+          "pickup_code": "A-1-06-006",
+          "shelf": {
+            "area": "A",
+            "level": 1,
+            "slot": 6,
+            "label": "A区-1层-06格"
+          },
+          "package": {
+            "id": 6,
+            "tracking_no": "SF9990000001",
+            "student_id": "S2021004",
+            "student_name": "赵六",
+            "phone": "13800004004",
+            "size": "large",
+            "shelf": {
+              "area": "A",
+              "level": 1,
+              "slot": 6,
+              "label": "A区-1层-06格"
+            },
+            "pickup_code": "A-1-06-006",
+            "status": "in_stock",
+            "created_at": "2026-11-11T20:31:52",
+            "picked_up_at": null
+          }
+        }
+      },
+      {
+        "name": "UC-03 重复入库(幂等)",
+        "api": "POST /api/packages/checkin",
+        "method": "POST",
+        "path": "/api/packages/checkin",
+        "request_body": {
+          "tracking_no": "SF9990000001",
+          "student_id": "S2021004",
+          "student_name": "赵六",
+          "phone": "13800004004",
+          "size": "large"
+        },
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "created": false,
+          "idempotent": true,
+          "message": "运单号已存在，跳过重复入库",
+          "pickup_code": "A-1-06-006",
+          "shelf": {
+            "area": "A",
+            "level": 1,
+            "slot": 6,
+            "label": "A区-1层-06格"
+          },
+          "package": {
+            "id": 6,
+            "tracking_no": "SF9990000001",
+            "student_id": "S2021004",
+            "student_name": "赵六",
+            "phone": "13800004004",
+            "size": "large",
+            "shelf": {
+              "area": "A",
+              "level": 1,
+              "slot": 6,
+              "label": "A区-1层-06格"
+            },
+            "pickup_code": "A-1-06-006",
+            "status": "in_stock",
+            "created_at": "2026-11-11T20:31:52",
+            "picked_up_at": null
+          }
+        }
+      },
+      {
+        "name": "UC-01 查询新入库包裹",
+        "api": "GET /api/packages/lookup?code=A-1-06-006",
+        "method": "GET",
+        "path": "/api/packages/lookup?code=A-1-06-006",
+        "request_body": null,
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "code": "A-1-06-006",
+          "shelf": {
+            "code": "A-1-06-006",
+            "area": "A",
+            "level": 1,
+            "slot": 6,
+            "sequence": 6,
+            "shelf": "A区-1层-06格"
+          },
+          "student": {
+            "id": "S2021004",
+            "name": "赵六",
+            "phone": "13800004004"
+          },
+          "total": 1,
+          "packages": [
+            {
+              "id": 6,
+              "tracking_no": "SF9990000001",
+              "student_id": "S2021004",
+              "student_name": "赵六",
+              "phone": "13800004004",
+              "size": "large",
+              "shelf": {
+                "area": "A",
+                "level": 1,
+                "slot": 6,
+                "label": "A区-1层-06格"
+              },
+              "pickup_code": "A-1-06-006",
+              "status": "in_stock",
+              "created_at": "2026-11-11T20:31:52",
+              "picked_up_at": null
+            }
+          ]
+        }
+      },
+      {
+        "name": "UC-04 生成代取授权",
+        "api": "POST /api/packages/authorize",
+        "method": "POST",
+        "path": "/api/packages/authorize",
+        "request_body": {
+          "pickup_code": "A-1-01-001",
+          "delegate_name": "同学甲",
+          "delegate_phone": "13800000000",
+          "ttl_minutes": 30
+        },
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "created": true,
+          "pickup_code": "A-1-01-001",
+          "auth_code": "237338",
+          "delegate_name": "同学甲",
+          "expires_at": "2026-11-11T21:01:52",
+          "ttl_minutes": 30,
+          "message": "代取授权已生成"
+        }
+      },
+      {
+        "name": "UC-04 查询授权状态",
+        "api": "GET /api/packages/authorize/A-1-01-001",
+        "method": "GET",
+        "path": "/api/packages/authorize/A-1-01-001",
+        "request_body": null,
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "pickup_code": "A-1-01-001",
+          "has_authorization": true,
+          "active_authorization": {
+            "auth_code": "237338",
+            "delegate_name": "同学甲",
+            "delegate_phone": "13800000000",
+            "expires_at": "2026-11-11T21:01:52",
+            "used": false,
+            "expired": false,
+            "valid": true,
+            "reason": "有效",
+            "created_at": "2026-11-11T20:31:52"
+          },
+          "valid": true,
+          "reason": "有效授权存在",
+          "authorizations": [
+            {
+              "auth_code": "237338",
+              "delegate_name": "同学甲",
+              "delegate_phone": "13800000000",
+              "expires_at": "2026-11-11T21:01:52",
+              "used": false,
+              "expired": false,
+              "valid": true,
+              "reason": "有效",
+              "created_at": "2026-11-11T20:31:52"
+            }
+          ]
+        }
+      },
+      {
+        "name": "UC-04 重复授权(拒绝)",
+        "api": "POST /api/packages/authorize",
+        "method": "POST",
+        "path": "/api/packages/authorize",
+        "request_body": {
+          "pickup_code": "A-1-01-001",
+          "delegate_name": "同学甲",
+          "delegate_phone": "13800000000",
+          "ttl_minutes": 30
+        },
+        "status_code": 409,
+        "ok": false,
+        "response": {
+          "detail": "该取件码已有有效授权，请勿重复授权"
+        }
+      },
+      {
+        "name": "UC-04 错误授权码出库",
+        "api": "POST /api/packages/checkout",
+        "method": "POST",
+        "path": "/api/packages/checkout",
+        "request_body": {
+          "pickup_code": "A-1-01-001",
+          "auth_code": "000000",
+          "operator": "值班员A"
+        },
+        "status_code": 403,
+        "ok": false,
+        "response": {
+          "detail": "代取授权码无效或与取件码不匹配"
+        }
+      },
+      {
+        "name": "UC-04 代取出库",
+        "api": "POST /api/packages/checkout",
+        "method": "POST",
+        "path": "/api/packages/checkout",
+        "request_body": {
+          "pickup_code": "A-1-01-001",
+          "auth_code": "237338",
+          "operator": "值班员A"
+        },
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "checked_out": true,
+          "exception_registered": false,
+          "pickup_code": "A-1-01-001",
+          "auth_code_used": "237338",
+          "operator": "值班员A",
+          "picked_up_at": "2026-11-11T20:31:52",
+          "message": "代取出库核验通过",
+          "package": {
+            "id": 1,
+            "tracking_no": "SF1000000001",
+            "student_id": "S2021001",
+            "student_name": "张三",
+            "phone": "13800001001",
+            "size": "small",
+            "shelf": {
+              "area": "A",
+              "level": 1,
+              "slot": 1,
+              "label": "A区-1层-01格"
+            },
+            "pickup_code": "A-1-01-001",
+            "status": "picked_up",
+            "created_at": "2026-11-11T20:31:52",
+            "picked_up_at": "2026-11-11T20:31:52"
+          }
+        }
+      },
+      {
+        "name": "UC-04 重复出库(拒绝)",
+        "api": "POST /api/packages/checkout",
+        "method": "POST",
+        "path": "/api/packages/checkout",
+        "request_body": {
+          "pickup_code": "A-1-01-001",
+          "operator": "值班员A"
+        },
+        "status_code": 409,
+        "ok": false,
+        "response": {
+          "detail": "重复出库或包裹不可出库，当前状态: picked_up"
+        }
+      },
+      {
+        "name": "UC-04 生成过期授权(ttl=0)",
+        "api": "POST /api/packages/authorize",
+        "method": "POST",
+        "path": "/api/packages/authorize",
+        "request_body": {
+          "pickup_code": "A-1-02-002",
+          "delegate_name": "同学乙",
+          "ttl_minutes": 0
+        },
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "created": true,
+          "pickup_code": "A-1-02-002",
+          "auth_code": "376452",
+          "delegate_name": "同学乙",
+          "expires_at": "2026-11-11T20:31:52",
+          "ttl_minutes": 0,
+          "message": "代取授权已生成"
+        }
+      },
+      {
+        "name": "UC-04 过期授权出库(拒绝)",
+        "api": "POST /api/packages/checkout",
+        "method": "POST",
+        "path": "/api/packages/checkout",
+        "request_body": {
+          "pickup_code": "A-1-02-002",
+          "auth_code": "376452"
+        },
+        "status_code": 403,
+        "ok": false,
+        "response": {
+          "detail": "代取授权已过期，请重新授权"
+        }
+      },
+      {
+        "name": "UC-04 登记异常件",
+        "api": "POST /api/packages/checkout",
+        "method": "POST",
+        "path": "/api/packages/checkout",
+        "request_body": {
+          "pickup_code": "A-1-03-003",
+          "operator": "值班员A",
+          "note": "外包装破损，暂停出库",
+          "report_exception": true
+        },
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "checked_out": false,
+          "exception_registered": true,
+          "reason": "外包装破损，暂停出库",
+          "message": "异常件已登记，包裹暂停出库",
+          "package": {
+            "id": 3,
+            "tracking_no": "SF1000000003",
+            "student_id": "S2021001",
+            "student_name": "张三",
+            "phone": "13800001001",
+            "size": "large",
+            "shelf": {
+              "area": "A",
+              "level": 1,
+              "slot": 3,
+              "label": "A区-1层-03格"
+            },
+            "pickup_code": "A-1-03-003",
+            "status": "exception",
+            "created_at": "2026-11-11T20:31:52",
+            "picked_up_at": null
+          }
+        }
+      },
+      {
+        "name": "UC-04 异常件清单",
+        "api": "GET /api/packages/exceptions",
+        "method": "GET",
+        "path": "/api/packages/exceptions",
+        "request_body": null,
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "total": 1,
+          "exceptions": [
+            {
+              "id": 1,
+              "pickup_code": "A-1-03-003",
+              "tracking_no": "SF1000000003",
+              "reason": "外包装破损，暂停出库",
+              "operator": "值班员A",
+              "created_at": "2026-11-11T20:31:52"
+            }
+          ]
+        }
+      },
+      {
+        "name": "UC-04 查询未授权包裹",
+        "api": "GET /api/packages/authorize/A-1-04-004",
+        "method": "GET",
+        "path": "/api/packages/authorize/A-1-04-004",
+        "request_body": null,
+        "status_code": 200,
+        "ok": true,
+        "response": {
+          "pickup_code": "A-1-04-004",
+          "has_authorization": false,
+          "active_authorization": null,
+          "valid": false,
+          "reason": "从未授权",
+          "authorizations": []
+        }
+      },
+      {
+        "name": "UC-04 对不存在取件码授权",
+        "api": "POST /api/packages/authorize",
+        "method": "POST",
+        "path": "/api/packages/authorize",
+        "request_body": {
+          "pickup_code": "F-5-20-999",
+          "delegate_name": "同学丙"
+        },
+        "status_code": 404,
+        "ok": false,
+        "response": {
+          "detail": "取件码不存在: F-5-20-999"
+        }
+      }
+    ]
+  },
+  "code_lines": {
+    "per_file": {
+      "app/__init__.py": 1,
+      "app/codes.py": 63,
+      "app/db.py": 129,
+      "app/forecast.py": 119,
+      "app/helpers.py": 25,
+      "app/main.py": 59,
+      "app/routers/__init__.py": 1,
+      "app/routers/uc01_lookup.py": 52,
+      "app/routers/uc02_forecast.py": 35,
+      "app/routers/uc03_checkin.py": 73,
+      "app/routers/uc04_checkout.py": 214,
+      "app/schemas.py": 29,
+      "frontend/app.js": 249,
+      "frontend/index.html": 104,
+      "frontend/style.css": 79,
+      "scripts/collect_metrics.py": 221,
+      "scripts/smoke.py": 144,
+      "tests/__init__.py": 1,
+      "tests/conftest.py": 37,
+      "tests/test_api.py": 292,
+      "tests/test_forecast.py": 104
+    },
+    "by_extension": {
+      ".css": 79,
+      ".html": 104,
+      ".js": 249,
+      ".py": 1599
+    },
+    "total_lines": 2031,
+    "file_count": 21
+  }
+}
