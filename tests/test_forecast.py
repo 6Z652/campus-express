@@ -100,5 +100,30 @@ def test_recommend_offpeak_no_history():
     assert recommend_offpeak_hour(None, 15) == 10
 
 
+# ---------------------------------------------------------------- E8 / E9（本轮补充）
+
+def test_history_hour_value_none_falls_back_to_global_mean():
+    """E8：历史表当前时段值为 NULL 时，按「无该时段数据」回退，不得抛 TypeError。
+
+    真实库里 queue_history.avg_service_minutes 允许采集缺失写 NULL；
+    若先 float(history[current_hour]) 再判空，接口会直接 500。
+    """
+    history = {10: 1.0, 11: None, 12: 3.0}
+    assert average_service_minutes(history, 11) == 2.0        # (1.0+3.0)/2
+    r = forecast(6, history, 11)
+    assert r["avg_service_minutes"] == 2.0
+    assert r["predicted_wait_minutes"] == 6                   # ceil(6*2.0/2)
+    assert r["recommended_offpeak_hour"] == 10                # 跳过 NULL 的 11 点
+
+
+def test_nonzero_queue_never_reports_zero_wait():
+    """E9：只要有人排队，等待分钟数向上取整后至少为 1，不得显示 0 分钟。"""
+    assert predict_wait_minutes(1, 0.2) == 1                  # ceil(0.1)
+    assert predict_wait_minutes(1, 0.5, servers=3) == 1        # ceil(0.1667)
+    r = forecast(1, HISTORY, 10)
+    assert r["predicted_wait_minutes"] == 1
+    assert r["congestion_level"] == "空闲"
+
+
 def test_forecast_is_deterministic():
     assert forecast(20, HISTORY, 12) == forecast(20, HISTORY, 12)
