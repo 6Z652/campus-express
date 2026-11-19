@@ -110,6 +110,33 @@ def test_uc03_checkin_idempotent(client):
     assert n == 1
 
 
+# ------------------------------------------------------------------
+def test_uc03_idempotent_keeps_first_record(client):
+    """E4：同运单号重复提交，以首次入库信息为准，其他字段不被覆盖。"""
+    first = {"tracking_no": "SF9990000002", "student_id": "S2021005",
+             "student_name": "赵六", "phone": "13800004005"}
+    client.post("/api/packages/checkin", json=first)
+    r = client.post("/api/packages/checkin", json={**first, "student_name": "钱七"})
+    assert r.status_code == 200
+    assert r.json()["created"] is False
+    assert r.json()["package"]["student_name"] == "赵六"      # 首次信息未被覆盖
+    conn = get_connection()
+    n = conn.execute("SELECT COUNT(*) AS n FROM packages").fetchone()["n"]
+    conn.close()
+    assert n == 6                                             # 5 条 seed + 本次 1 条
+
+
+def test_uc03_sequential_checkin_increments_shelf(client):
+    """连续入库两件：入库序号 6/7 -> A-1-06-006、A-1-07-007。"""
+    base = {"student_id": "S2021005", "student_name": "赵六"}
+    c1 = client.post("/api/packages/checkin",
+                     json={**base, "tracking_no": "SF9990000003"}).json()["pickup_code"]
+    c2 = client.post("/api/packages/checkin",
+                     json={**base, "tracking_no": "SF9990000004"}).json()["pickup_code"]
+    assert c1 == "A-1-06-006"
+    assert c2 == "A-1-07-007"
+
+
 # ---------------------------------------------------------------- UC-04 正常流
 
 def test_uc04_authorize_and_query(client):
