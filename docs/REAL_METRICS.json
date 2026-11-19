@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-11-11T20:31:52",
+  "generated_at": "2026-11-19T22:09:02",
   "note": "本文件所有数字均由 scripts/collect_metrics.py 在本机实际运行采集，未手工编造。测试数来自 pytest -q 真实输出；耗时由 time.perf_counter() 真实测量；API 响应来自 TestClient 真实调用。",
   "environment": {
     "python_version": "3.13.14",
-    "platform": "Windows-11-10.0.26200-SP0",
-    "fastapi_version": "0.162.4",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "fastapi_version": "0.115.6",
     "pytest_version": "9.2.0"
   },
   "tests": {
-    "total": 37,
-    "passed": 37,
+    "total": 47,
+    "passed": 47,
     "failed": 0,
     "errors": 0,
     "skipped": 0,
     "warnings": 1,
-    "pytest_summary_line": "37 passed, 1 warning in 4.96s",
+    "pytest_summary_line": "47 passed, 1 warning in 4.71s",
     "by_module": {
-      "tests/test_api.py": 24,
+      "tests/test_api.py": 34,
       "tests/test_forecast.py": 13
     },
     "by_use_case": {
-      "UC-01": 5,
+      "UC-01": 8,
       "UC-02": 1,
-      "UC-03": 3,
-      "UC-04": 14,
+      "UC-03": 5,
+      "UC-04": 19,
       "健康检查": 1,
       "预测算法边界(纯函数)": 13
     },
     "collect_only_returncode": 0,
     "consistency_check": {
       "collected_equals_passed_plus_failed": true,
-      "timing_run_passed": 37,
-      "timing_run_summary_line": "37 passed, 1 warning in 4.94s"
+      "timing_run_passed": 47,
+      "timing_run_summary_line": "47 passed, 1 warning in 5.02s"
     }
   },
   "timing_seconds": {
-    "pytest_wall_time_measured": 7.687,
-    "pytest_reported_duration": 4.96,
-    "smoke_api_calls_wall_time_measured": 1.62,
-    "metrics_collection_total_wall_time_measured": 12.086
+    "pytest_wall_time_measured": 8.895,
+    "pytest_reported_duration": 4.71,
+    "smoke_api_calls_wall_time_measured": 2.258,
+    "metrics_collection_total_wall_time_measured": 15.078
   },
   "api_calls": {
     "total": 22,
@@ -120,7 +120,7 @@
               },
               "pickup_code": "A-1-01-001",
               "status": "in_stock",
-              "created_at": "2026-11-11T20:31:52",
+              "created_at": "2026-11-19T22:09:01",
               "picked_up_at": null
             },
             {
@@ -138,7 +138,7 @@
               },
               "pickup_code": "A-1-02-002",
               "status": "in_stock",
-              "created_at": "2026-11-11T20:31:52",
+              "created_at": "2026-11-19T22:09:01",
               "picked_up_at": null
             },
             {
@@ -156,7 +156,7 @@
               },
               "pickup_code": "A-1-03-003",
               "status": "in_stock",
-              "created_at": "2026-11-11T20:31:52",
+              "created_at": "2026-11-19T22:09:01",
               "picked_up_at": null
             }
           ]
@@ -202,7 +202,7 @@
               },
               "pickup_code": "A-1-01-001",
               "status": "in_stock",
-              "created_at": "2026-11-11T20:31:52",
+              "created_at": "2026-11-19T22:09:01",
               "picked_up_at": null
             },
             {
@@ -220,7 +220,7 @@
               },
               "pickup_code": "A-1-02-002",
               "status": "in_stock",
-              "created_at": "2026-11-11T20:31:52",
+              "created_at": "2026-11-19T22:09:01",
               "picked_up_at": null
             },
             {
@@ -238,7 +238,7 @@
               },
               "pickup_code": "A-1-03-003",
               "status": "in_stock",
-              "created_at": "2026-11-11T20:31:52",
+              "created_at": "2026-11-19T22:09:01",
               "picked_up_at": null
             }
           ]
@@ -277,14 +277,14 @@
         "status_code": 200,
         "ok": true,
         "response": {
-          "current_hour": 20,
+          "current_hour": 22,
           "pending_count": 5,
           "servers": 2,
-          "avg_service_minutes": 0.8,
-          "predicted_wait_minutes": 2,
-          "congestion_level": "空闲",
+          "avg_service_minutes": 1.55,
+          "predicted_wait_minutes": 4,
+          "congestion_level": "正常",
           "recommended_offpeak_hour": 10,
-          "recommendation": "当前预计等待 2 分钟（空闲），建议 10:00-10:59 错峰取件。",
+          "recommendation": "当前预计等待 4 分钟（正常），建议 10:00-10:59 错峰取件。",
           "algorithm": "wait = ceil(pending_count * avg_service_minutes / servers); avg 取当前时段历史均值，无该时段取全局均值，完全无历史取 1.5min"
         }
       },
@@ -328,7 +328,7 @@
             },
             "pickup_code": "A-1-06-006",
             "status": "in_stock",
-            "created_at": "2026-11-11T20:31:52",
+            "created_at": "2026-11-19T22:09:02",
             "picked_up_at": null
           }
         }
@@ -373,7 +373,7 @@
             },
             "pickup_code": "A-1-06-006",
             "status": "in_stock",
-            "created_at": "2026-11-11T20:31:52",
+            "created_at": "2026-11-19T22:09:02",
             "picked_up_at": null
           }
         }
@@ -418,7 +418,7 @@
               },
               "pickup_code": "A-1-06-006",
               "status": "in_stock",
-              "created_at": "2026-11-11T20:31:52",
+              "created_at": "2026-11-19T22:09:02",
               "picked_up_at": null
             }
           ]
@@ -440,9 +440,9 @@
         "response": {
           "created": true,
           "pickup_code": "A-1-01-001",
-          "auth_code": "237338",
+          "auth_code": "165173",
           "delegate_name": "同学甲",
-          "expires_at": "2026-11-11T21:01:52",
+          "expires_at": "2026-11-19T22:39:02",
           "ttl_minutes": 30,
           "message": "代取授权已生成"
         }
@@ -459,29 +459,29 @@
           "pickup_code": "A-1-01-001",
           "has_authorization": true,
           "active_authorization": {
-            "auth_code": "237338",
+            "auth_code": "165173",
             "delegate_name": "同学甲",
             "delegate_phone": "13800000000",
-            "expires_at": "2026-11-11T21:01:52",
+            "expires_at": "2026-11-19T22:39:02",
             "used": false,
             "expired": false,
             "valid": true,
             "reason": "有效",
-            "created_at": "2026-11-11T20:31:52"
+            "created_at": "2026-11-19T22:09:02"
           },
           "valid": true,
           "reason": "有效授权存在",
           "authorizations": [
             {
-              "auth_code": "237338",
+              "auth_code": "165173",
               "delegate_name": "同学甲",
               "delegate_phone": "13800000000",
-              "expires_at": "2026-11-11T21:01:52",
+              "expires_at": "2026-11-19T22:39:02",
               "used": false,
               "expired": false,
               "valid": true,
               "reason": "有效",
-              "created_at": "2026-11-11T20:31:52"
+              "created_at": "2026-11-19T22:09:02"
             }
           ]
         }
@@ -526,7 +526,7 @@
         "path": "/api/packages/checkout",
         "request_body": {
           "pickup_code": "A-1-01-001",
-          "auth_code": "237338",
+          "auth_code": "165173",
           "operator": "值班员A"
         },
         "status_code": 200,
@@ -535,9 +535,9 @@
           "checked_out": true,
           "exception_registered": false,
           "pickup_code": "A-1-01-001",
-          "auth_code_used": "237338",
+          "auth_code_used": "165173",
           "operator": "值班员A",
-          "picked_up_at": "2026-11-11T20:31:52",
+          "picked_up_at": "2026-11-19T22:09:02",
           "message": "代取出库核验通过",
           "package": {
             "id": 1,
@@ -554,8 +554,8 @@
             },
             "pickup_code": "A-1-01-001",
             "status": "picked_up",
-            "created_at": "2026-11-11T20:31:52",
-            "picked_up_at": "2026-11-11T20:31:52"
+            "created_at": "2026-11-19T22:09:01",
+            "picked_up_at": "2026-11-19T22:09:02"
           }
         }
       },
@@ -589,9 +589,9 @@
         "response": {
           "created": true,
           "pickup_code": "A-1-02-002",
-          "auth_code": "376452",
+          "auth_code": "669027",
           "delegate_name": "同学乙",
-          "expires_at": "2026-11-11T20:31:52",
+          "expires_at": "2026-11-19T22:09:02",
           "ttl_minutes": 0,
           "message": "代取授权已生成"
         }
@@ -603,7 +603,7 @@
         "path": "/api/packages/checkout",
         "request_body": {
           "pickup_code": "A-1-02-002",
-          "auth_code": "376452"
+          "auth_code": "669027"
         },
         "status_code": 403,
         "ok": false,
@@ -644,7 +644,7 @@
             },
             "pickup_code": "A-1-03-003",
             "status": "exception",
-            "created_at": "2026-11-11T20:31:52",
+            "created_at": "2026-11-19T22:09:01",
             "picked_up_at": null
           }
         }
@@ -666,7 +666,7 @@
               "tracking_no": "SF1000000003",
               "reason": "外包装破损，暂停出库",
               "operator": "值班员A",
-              "created_at": "2026-11-11T20:31:52"
+              "created_at": "2026-11-19T22:09:02"
             }
           ]
         }
@@ -717,7 +717,7 @@
       "app/routers/uc01_lookup.py": 52,
       "app/routers/uc02_forecast.py": 35,
       "app/routers/uc03_checkin.py": 73,
-      "app/routers/uc04_checkout.py": 214,
+      "app/routers/uc04_checkout.py": 231,
       "app/schemas.py": 29,
       "frontend/app.js": 249,
       "frontend/index.html": 104,
@@ -726,16 +726,16 @@
       "scripts/smoke.py": 144,
       "tests/__init__.py": 1,
       "tests/conftest.py": 37,
-      "tests/test_api.py": 292,
+      "tests/test_api.py": 466,
       "tests/test_forecast.py": 104
     },
     "by_extension": {
       ".css": 79,
       ".html": 104,
       ".js": 249,
-      ".py": 1599
+      ".py": 1790
     },
-    "total_lines": 2031,
+    "total_lines": 2222,
     "file_count": 21
   }
 }

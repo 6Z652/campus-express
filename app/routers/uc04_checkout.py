@@ -7,7 +7,8 @@ GET  /api/packages/exceptions           已登记异常件清单
 
 异常分支：取件码不存在 404、重复出库 409、授权码错误 403、
           授权过期 403、授权码重复使用 409、对非在库包裹授权 409、
-          重复授权 409。
+          重复授权 409、对非在库包裹登记异常件 409、
+          重复登记异常件 409。
 """
 from __future__ import annotations
 
@@ -143,7 +144,23 @@ def checkout(req: CheckoutRequest):
         now_s = now.isoformat(timespec="seconds")
 
         # 异常件登记：只登记不出库，包裹状态置为 exception
+        # 前置校验：只有仍在库的包裹才允许登记异常件。
+        # 否则会出现两种状态机回退：已出库包裹被改回 exception、异常件被重复登记。
         if req.report_exception:
+            if pkg["status"] == "exception":
+                raise HTTPException(
+                    status_code=409,
+                    detail=f"该包裹已登记为异常件，请勿重复登记: {req.pickup_code}",
+                )
+            if pkg["status"] != "in_stock":
+                raise HTTPException(
+                    status_code=409,
+                    detail=(
+                        f"包裹已出库，不可再登记异常件，当前状态: {pkg['status']}"
+                        f"，出库时间: {pkg['picked_up_at']}"
+                    ),
+                )
+
             reason = req.note or "包裹异常（破损/信息不符），暂停出库"
             conn.execute(
                 "INSERT INTO exceptions (pickup_code, tracking_no, reason, operator, created_at) "
