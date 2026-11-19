@@ -9,8 +9,8 @@ default_service  完全无历史数据时的兜底单人时长（默认 1.5 分�
 
 == 算法 ==
 1) service = 当前时段的历史平均时长；
-   若该时段无数据，退化为全部历史时段的算术平均；
-   若完全没有历史数据，使用 default_service（1.5 分钟）。
+   若该时段无数据或值为 NULL（采集缺失），退化为全部历史时段的算术平均；
+   若完全没有可用历史数据，使用 default_service（1.5 分钟）。
 2) predicted_wait = ceil(pending_count * service / servers)
    —— 工作量模型：待服务总工作量 / 并行窗口数，向上取整到分钟。
    pending_count <= 0 时直接返回 0（无人排队边界）。
@@ -34,11 +34,15 @@ DEFAULT_OFFPEAK_HOURS = [10, 15]
 def average_service_minutes(
     history: Optional[Dict], current_hour: int, default: float = DEFAULT_SERVICE_MINUTES
 ) -> float:
-    """取当前时段平均服务时长；缺该时段用全局平均；完全无数据用兜底值。"""
+    """取当前时段平均服务时长；缺该时段或值为 NULL 用全局平均；完全无数据用兜底值。
+
+    注意：NULL 必须先判再取值，否则 float(None) 会抛 TypeError，接口会变成 500。
+    """
     if not history:
         return float(default)
-    if current_hour in history:
-        return float(history[current_hour])
+    value = history.get(current_hour)
+    if value is not None:
+        return float(value)
     values = [float(v) for v in history.values() if v is not None]
     if not values:
         return float(default)
