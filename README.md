@@ -116,7 +116,7 @@ campus_express/
 
 | 成员 | 负责用例 | 目录归属 |
 | --- | --- | --- |
-| 成员 A | UC-01 取件码解析与包裹聚合查询 | `app/routers/uc01_lookup.py`、`app/codes.py`、`docs/usecases/UC-01.md`、`tests/test_api.py` 中 UC-01 用例、`frontend/` 学生端「取件码查询」模块 |
+| 赵佳悦（组长） | UC-01 取件码解析与包裹聚合查询 | `app/routers/uc01_lookup.py`、`app/codes.py`、`docs/usecases/UC-01.md`、`tests/test_api.py` 中 UC-01 用例、`frontend/` 学生端「取件码查询」模块 |
 | 成员 B | UC-02 排队预测与错峰提醒 | `app/forecast.py`、`app/routers/uc02_forecast.py`、`tests/test_forecast.py`、`docs/usecases/UC-02.md`、`frontend/` 学生端「排队预测 / 错峰建议」模块 |
 | 李艳慧 | UC-03 入库与货架分配 | `app/routers/uc03_checkin.py`、`app/db.py` 中 `packages` 表与 seed、`docs/usecases/UC-03.md`、`frontend/` 工作人员端「入库 / 货架分配」模块 |
 | 成员 D | UC-04 出库核验与代取授权 | `app/routers/uc04_checkout.py`、`app/db.py` 中 `authorizations` / `exceptions` 表、`docs/usecases/UC-04.md`、`frontend/` 工作人员端「出库核验」模块 |

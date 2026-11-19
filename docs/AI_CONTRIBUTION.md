@@ -22,6 +22,8 @@
 | 4 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 |
 | 5 | 2026-11-19 | 李艳慧 | UC-03 扫码入库与货架自动分配 | WorkBuddy（DeepSeek-V4-Flash） | 测试编写 + 文档校准 | `tests/test_api.py` 新增 `test_uc03_idempotent_keeps_first_record`、`test_uc03_sequential_checkin_increments_shelf`；`docs/usecases/UC-03.md` 验收要点补 2 条 | 按 seed 只有 5 条包裹，核对期望货架位为 A-1-06-006 / A-1-07-007；测试插入 UC-03 段内而非文件末尾，避开成员 D 的 UC-04 段；复核后未改动断言逻辑 | `python -m pytest tests/test_api.py -q` → 26 passed；`python -m pytest -q` → 39 passed | 约 65% |
 
+| 6 | 2026-11-19 | 赵佳悦 | UC-01 取件码解析与包裹聚合查询 | WorkBuddy（DeepSeek-V4-Flash） | 测试编写 + 用例文档校准 | `tests/test_api.py` 新增 `test_uc01_lookup_trims_surrounding_space`、`test_uc01_lowercase_area_is_rejected`、`test_uc01_newly_checked_in_package_is_queryable`；`docs/usecases/UC-01.md` 补 E5/E6 两条异常流与 2 条验收要点 | 核对 `parse_pickup_code` 是先 `strip()` 再走正则，故首尾空格属合法输入、小写区号应判 400；第三条用例改为复用 UC-03 入库接口返回的 `pickup_code`，不再硬编码货架位，并把断言从「等于固定字符串」改为「解析货架号 == 入库存储的 `shelf_label`」，避免与 seed 数据耦合 | `python -m pytest tests/test_api.py -q` → 29 passed；`python -m pytest -q` → 42 passed | 约 70% |
+
 （行数按实际需要增减，一人可多行。）
 
 ## 汇总与自查（由组长汇总填写）
