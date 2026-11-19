@@ -20,7 +20,7 @@
 | 2 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 |
 | 3 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 |
 | 4 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 | 【待填写】 |
-| 5 | 2026-11-19 | 成员 C | UC-03 扫码入库与货架自动分配 | WorkBuddy（DeepSeek-V4-Flash） | 测试编写 + 文档校准 | `tests/test_api.py` 新增 `test_uc03_idempotent_keeps_first_record`、`test_uc03_sequential_checkin_increments_shelf`；`docs/usecases/UC-03.md` 验收要点补 2 条 | 按 seed 只有 5 条包裹，核对期望货架位为 A-1-06-006 / A-1-07-007；测试插入 UC-03 段内而非文件末尾，避开成员 D 的 UC-04 段；复核后未改动断言逻辑 | `python -m pytest tests/test_api.py -q` → 26 passed；`python -m pytest -q` → 39 passed | 约 65% |
+| 5 | 2026-11-19 | 李艳慧 | UC-03 扫码入库与货架自动分配 | WorkBuddy（DeepSeek-V4-Flash） | 测试编写 + 文档校准 | `tests/test_api.py` 新增 `test_uc03_idempotent_keeps_first_record`、`test_uc03_sequential_checkin_increments_shelf`；`docs/usecases/UC-03.md` 验收要点补 2 条 | 按 seed 只有 5 条包裹，核对期望货架位为 A-1-06-006 / A-1-07-007；测试插入 UC-03 段内而非文件末尾，避开成员 D 的 UC-04 段；复核后未改动断言逻辑 | `python -m pytest tests/test_api.py -q` → 26 passed；`python -m pytest -q` → 39 passed | 约 65% |
 
 （行数按实际需要增减，一人可多行。）
 
