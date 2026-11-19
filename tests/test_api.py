@@ -47,6 +47,42 @@ def test_uc01_lookup_post_also_supported(client):
     assert r.json()["total"] == 3
 
 
+# ------------------------------------------------- UC-01 补充边界（本次迭代新增）
+
+def test_uc01_lookup_trims_surrounding_space(client):
+    """取件码首尾含空格时应先裁剪再解析，仍按正常流返回。"""
+    r = client.get("/api/packages/lookup", params={"code": "  A-1-01-001  "})
+    assert r.status_code == 200
+    d = r.json()
+    assert d["code"] == "A-1-01-001"          # 回显的是裁剪后的取件码
+    assert d["total"] == 3
+
+
+def test_uc01_lowercase_area_is_rejected(client):
+    """区号只允许大写 A~F；小写与入库生成规则不一致，应判格式非法。"""
+    r = client.get("/api/packages/lookup", params={"code": "a-1-01-001"})
+    assert r.status_code == 400
+    assert "格式非法" in r.json()["detail"]
+
+
+def test_uc01_newly_checked_in_package_is_queryable(client):
+    """入库生成的取件码可立即被 UC-01 查到，且解析货架号与入库存储一致。"""
+    inp = {"tracking_no": "SF9990000009", "student_id": "S2021009",
+           "student_name": "孙九", "phone": "13800004009"}
+    r = client.post("/api/packages/checkin", json=inp)
+    assert r.status_code == 200
+    code = r.json()["pickup_code"]            # 第 6 件 -> A-1-06-006
+
+    q = client.get("/api/packages/lookup", params={"code": code})
+    assert q.status_code == 200
+    d = q.json()
+    assert d["code"] == code
+    assert d["student"]["name"] == "孙九"
+    assert d["total"] == 1
+    assert d["packages"][0]["tracking_no"] == "SF9990000009"
+    assert d["packages"][0]["shelf"]["label"] == d["shelf"]["shelf"]
+
+
 # ---------------------------------------------------------------- UC-02 正常流
 
 def test_uc02_forecast(client):
