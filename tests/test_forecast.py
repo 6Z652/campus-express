@@ -102,3 +102,16 @@ def test_recommend_offpeak_no_history():
 
 def test_forecast_is_deterministic():
     assert forecast(20, HISTORY, 12) == forecast(20, HISTORY, 12)
+
+
+def test_forecast_invalid_negative_input():
+    """测试异常流：待取件数为负数时，应安全处理并返回 0 等待"""
+    result = forecast(pending_count=-5, history={12: 1.5}, current_hour=12)
+    assert result["predicted_wait_minutes"] == 0
+    assert result["congestion_level"] == "空闲"
+
+def test_forecast_extreme_wait_time():
+    """测试极端情况：高排队人数 + 高历史均值"""
+    extreme_history = {12: 60.0}
+    # 10 * 60 / 2 = 300
+    assert predict_wait_minutes(10, 60.0) == 300

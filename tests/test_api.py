@@ -3,6 +3,8 @@
 所有请求通过 FastAPI TestClient 完成，不启动任何常驻后台服务。
 """
 from __future__ import annotations
+from app.forecast import forecast, predict_wait_minutes
+
 
 import re
 
@@ -290,3 +292,18 @@ def test_uc04_query_auth_never_authorized(client):
     assert r.status_code == 200
     assert r.json()["valid"] is False
     assert r.json()["reason"] == "从未授权"
+
+def test_uc02_edge_zero_queue():
+    """边界测试 E1：待取件数为 0 的情况（直接测纯函数，不依赖数据库）"""
+    result = forecast(pending_count=0, history={12: 2.0}, current_hour=12)
+    assert result["predicted_wait_minutes"] == 0
+    assert result["congestion_level"] == "空闲"
+    assert result["recommendation"].startswith("当前预计等待 0 分钟")
+
+def test_uc02_edge_no_history():
+    """边界测试 E4：完全无历史数据时，回退到默认 1.5 分钟"""
+    result = forecast(pending_count=10, history={}, current_hour=12)
+    # 计算公式：ceil(10 * 1.5 / 2) = 8
+    assert result["avg_service_minutes"] == 1.5
+    assert result["predicted_wait_minutes"] == 8
+    assert result["congestion_level"] == "繁忙"
