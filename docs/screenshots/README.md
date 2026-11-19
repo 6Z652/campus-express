@@ -23,7 +23,7 @@ python -m http.server 8080 --directory frontend
 | `05_staff_checkout.png` | 工作人员端出库核验通过 / 代取授权码校验 | UC-04 |
 | `06_staff_exception.png` | 工作人员端登记异常件 | UC-04 |
 | `06b_staff_exception_list.png` | 异常件清单（`查看异常件`） | UC-04 |
-| `07_pytest.png` | 本机 `pytest -q` 真实输出（应与 `docs/smoke_test_output.txt` 一致） | 测试 |
+| `07_pytest.png` | 本机 `pytest` 真实输出（`collected 47 items` → `47 passed`） | 测试 |
 | `08_api_docs.png` | `http://127.0.0.1:8000/docs` Swagger 页面 | 工程化 |
 
 ## 要求
@@ -35,9 +35,9 @@ python -m http.server 8080 --directory frontend
 
 ## 当前状态
 
-- 已放入截图数量：7 / 8（`01` `02` `03` `04` `05` `06` `06b`；缺 `07_pytest.png`、`08_api_docs.png`，见下方说明）
+- 已放入截图数量：**9 张（清单内 8 张全部齐全，另有 `06b`）**
 - 截图人 / 日期：张春亚 / 2026-11-19
-- 运行命令与浏览器版本：`python -m uvicorn app.main:app --port 8000` + `python -m http.server 8080 --directory frontend`；Google Chrome 157.0.8103.52（1280×820 视口）
+- 运行命令与浏览器版本：`python -m uvicorn app.main:app --port 8000` + `python -m http.server 8080 --directory frontend`；Google Chrome 157.0.8103.52
 
 ### 本次截图的取数时点（与文档数字对齐）
 
@@ -45,7 +45,19 @@ python -m http.server 8080 --directory frontend
 - `03_student_authorize.png` 生成的授权码 `003051` 与 `05_staff_checkout.png` 中「代取（授权码 003051）」是同一次会话的真实返回值。
 - `docs/smoke_test_output.txt` 与 `REAL_METRICS.json` 已按本轮 `pytest -q` 重跑覆盖：**47 passed**（成员 D 的 UC-04 用例 5 个 + 其他成员 UC-01/UC-03 边界用例，基线 37）。
 
-### 尚未补齐的两张（需本机交互式终端）
+### 补拍的 07 / 08 是怎么来的
 
-- `07_pytest.png`：需在**交互式终端**里跑 `python -m pytest -q` 后截图（含标题栏与命令回显）。本目录的自动化截图只能拿到浏览器渲染，无法生成真实终端窗口，故留空，不做伪造。
-- `08_api_docs.png`：`/docs` 的 Swagger UI 依赖 CDN 加载前端资源，本次截图环境网络受限导致页面空白，已删除空白图。请在能访问外网的机器上打开 `http://127.0.0.1:8000/docs` 后补拍。
+- `07_pytest.png`：在**真实 Windows 终端窗口**里执行
+  `python -m pytest --no-header -p no:warnings`，窗口最大化后整屏截取（含标题栏与命令回显）。
+  画面中可见 `collected 47 items`、`tests\test_api.py` 与 `tests\test_forecast.py` 两行进度、
+  `47 passed in 4.75s`、`=== exit code: 0 ===`，末尾是本项目目录的提示符。
+  加 `--no-header -p no:warnings` 只是为了让整轮结果在一屏内显示完（否则 `platform` / `rootdir`
+  与 warnings summary 会把顶行挤出可视区），**用例数与结论未做任何改动**；完整原始输出见 `docs/smoke_test_output.txt`。
+- `08_api_docs.png`：后端启动后打开 `http://127.0.0.1:8000/docs`，地址栏可见 `127.0.0.1:8000/docs`。
+  为了把 UC-01~UC-04 四个分组的 8 个接口一次性拍全，浏览器缩放到 75% 后截取。
+
+### 说明
+
+- 两张图都是窗口级截屏（不是浏览器页面渲染导出），因此能看到系统标题栏、地址栏与终端提示符，
+  可据此判断确为本机真实运行。
+- `05_staff_checkout.png` / `06b_...` 与 `07` / `08` 是同一晚、同一份代码（`pytest` 47 passed）下采集的。
