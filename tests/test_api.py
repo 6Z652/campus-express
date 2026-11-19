@@ -10,6 +10,7 @@ from app.codes import CODE_RE
 from app.db import get_connection
 
 CODE = "A-1-01-001"          # seed 中张三的第 1 个包裹
+OTHER = "A-1-02-002"         # seed 中张三的第 2 个包裹（用于构造「授权码/取件码不匹配」）
 NEW_TRACKING = "SF9990000001"
 
 
@@ -353,3 +354,113 @@ def test_uc04_query_auth_never_authorized(client):
     assert r.status_code == 200
     assert r.json()["valid"] is False
     assert r.json()["reason"] == "从未授权"
+
+
+# ------------------------------------------------ UC-04 成员D 补充：异常与边界测试
+#
+# 上述用例覆盖了「授权码不存在 / 过期 / 已使用」三条 403/409 分支，
+# 但仍有三处未被覆盖：授权码「存在但属于别的取件码」、异常件登记的入口校验、
+# 以及 ttl 刚好为正的有效性下界。以下 5 个用例补齐这些分支。
+
+
+def test_uc04_checkout_auth_code_belongs_to_another_package(client):
+    """E3 的另一半：授权码真实存在但属于另一个取件码 -> 403，且不能误出库。
+
+    原有用例只验证了「授权码完全不存在」（000000），没有验证「存在但不匹配」，
+    而代码里 `auth["pickup_code"] != req.pickup_code` 是独立的一条判断。
+    """
+    other_auth = client.post("/api/packages/authorize", json={
+        "pickup_code": OTHER, "delegate_name": "同学乙", "ttl_minutes": 30,
+    }).json()["auth_code"]
+
+    r = client.post("/api/packages/checkout", json={
+        "pickup_code": CODE, "auth_code": other_auth, "operator": "值班员A",
+    })
+    assert r.status_code == 403
+    assert "不匹配" in r.json()["detail"]
+
+    # 失败必须不产生副作用：目标包裹仍在库，授权码也没被消耗
+    q = client.get("/api/packages/lookup", params={"code": CODE})
+    assert q.json()["packages"][0]["status"] == "in_stock"
+
+    conn = get_connection()
+    used = conn.execute(
+        "SELECT used FROM authorizations WHERE auth_code=?", (other_auth,)
+    ).fetchone()["used"]
+    conn.close()
+    assert used == 0
+
+    # 该授权码仍可用于它真正对应的包裹
+    ok = client.post("/api/packages/checkout", json={
+        "pickup_code": OTHER, "auth_code": other_auth,
+    })
+    assert ok.status_code == 200
+    assert ok.json()["auth_code_used"] == other_auth
+
+
+def test_uc04_exception_on_nonexistent_code(client):
+    """异常件登记的入口校验：查无此码 -> 404，且不留下脏数据。"""
+    r = client.post("/api/packages/checkout", json={
+        "pickup_code": "F-5-20-999", "report_exception": True,
+        "note": "外包装破损", "operator": "值班员A",
+    })
+    assert r.status_code == 404
+    assert "不存在" in r.json()["detail"]
+
+    assert client.get("/api/packages/exceptions").json()["total"] == 0
+
+
+def test_uc04_exception_on_picked_up_package(client):
+    """缺陷回归：已出库包裹不得再登记异常件（否则状态机从 picked_up 回退到 exception）。"""
+    client.post("/api/packages/checkout", json={"pickup_code": CODE})
+
+    r = client.post("/api/packages/checkout", json={
+        "pickup_code": CODE, "report_exception": True, "note": "事后补报破损",
+    })
+    assert r.status_code == 409
+    assert "已出库" in r.json()["detail"]
+
+    # 状态保持 picked_up，且出库时间没被清掉
+    q = client.get("/api/packages/lookup", params={"code": CODE})
+    assert q.json()["packages"][0]["status"] == "picked_up"
+    assert q.json()["packages"][0]["picked_up_at"] is not None
+    assert client.get("/api/packages/exceptions").json()["total"] == 0
+
+
+def test_uc04_exception_duplicate(client):
+    """缺陷回归：同一包裹重复登记异常件 -> 409，异常件清单只有 1 条。"""
+    first = client.post("/api/packages/checkout", json={
+        "pickup_code": CODE, "report_exception": True,
+        "note": "外包装破损", "operator": "值班员A",
+    })
+    assert first.status_code == 200
+
+    second = client.post("/api/packages/checkout", json={
+        "pickup_code": CODE, "report_exception": True, "note": "再次登记",
+    })
+    assert second.status_code == 409
+    assert "重复登记" in second.json()["detail"]
+
+    lst = client.get("/api/packages/exceptions").json()
+    assert lst["total"] == 1
+    assert lst["exceptions"][0]["reason"] == "外包装破损"
+
+
+def test_uc04_authorize_ttl_boundary_one_minute(client):
+    """边界：ttl_minutes=1 是「仍然有效」的下界（紧邻 ttl=0 的立即过期）。"""
+    r = client.post("/api/packages/authorize", json={
+        "pickup_code": CODE, "delegate_name": "同学甲", "ttl_minutes": 1,
+    })
+    assert r.status_code == 200
+    auth = r.json()["auth_code"]
+
+    q = client.get(f"/api/packages/authorize/{CODE}").json()
+    assert q["valid"] is True
+    assert q["active_authorization"]["expired"] is False
+    assert q["active_authorization"]["auth_code"] == auth
+
+    ok = client.post("/api/packages/checkout", json={
+        "pickup_code": CODE, "auth_code": auth,
+    })
+    assert ok.status_code == 200
+    assert ok.json()["auth_code_used"] == auth
